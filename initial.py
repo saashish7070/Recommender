@@ -2,11 +2,6 @@ import torch
 import torchvision
 from torchvision import transforms
 from torch.nn.functional import cosine_similarity
-
-import torch
-import torchvision
-from torchvision import transforms
-from torch.nn.functional import cosine_similarity
 import json
 
 
@@ -22,7 +17,7 @@ def image_preprocessing(image, height, width):
     """
     resize = transforms.Resize( ( height, width), antialias=True )
     resized_image = resize(image)
-    print( resized_image.shape)
+    print( resized_image.shape )
     return resized_image.float()
 
 
@@ -35,6 +30,7 @@ def compute_embedding( image ):
     { prodouctId : image_embd }
 """
 def compute_similar_images( embd, num_images, product ):
+    
     all_embds = torch.stack(list(product.values()), dim = 0)
     all_products =  list(product.keys())
 
@@ -57,11 +53,10 @@ def read_embeddings():
     for product in data.items(): 
         
         data[product[0]] = torch.tensor(product[1])
-        # print( data[product[0]].dtype )
     return data
 
 
-image = read_images('./images/95534.jpg')
-resized_image = image_preprocessing(image, 800, 800)
-product = read_embeddings()
-print(compute_similar_images( compute_embedding(resized_image), 5, product ))
+def recommend( productId, k ):
+    data = read_embeddings()
+    topk_product = compute_similar_images( data[productId], k, data)
+    return topk_product
