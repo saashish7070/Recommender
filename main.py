@@ -6,6 +6,8 @@ from typing import List
 import json
 from pydantic import BaseModel
 
+#testing
+
 f = open('./productsWImage.json', 'r')
 json_product = json.loads(f.read() )
 
